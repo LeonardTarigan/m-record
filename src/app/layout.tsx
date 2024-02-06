@@ -21,7 +21,7 @@ export default function RootLayout({
           inter.className + " flex w-full justify-center overflow-hidden"
         }
       >
-        <div className="relative h-screen w-full overflow-auto border-2 sm:max-w-[400px]">
+        <div className="relative h-screen w-full overflow-auto sm:max-w-[400px] md:border-2">
           {children}
           <BottomNav />
         </div>
