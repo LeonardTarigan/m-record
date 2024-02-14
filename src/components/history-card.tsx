@@ -7,7 +7,7 @@ function HistoryCard() {
         <BadgeCheckIcon className="w-5 text-green-500" />
         <h1 className="text-sm font-bold">12 September 2022</h1>
       </div>
-      <button className="rounded-md bg-blue-600 px-4 py-1 text-sm text-white">
+      <button className="rounded-md bg-blue-600 px-4 py-1 text-sm font-semibold text-white transition-all duration-150 hover:bg-blue-800 active:translate-y-1">
         Bukti
       </button>
     </div>
