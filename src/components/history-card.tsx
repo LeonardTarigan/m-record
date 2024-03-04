@@ -1,4 +1,4 @@
-import BadgeCheckIcon from "./icons/badge-check";
+import BadgeCheckIcon from "./icons/badge-check-icon";
 
 function HistoryCard() {
   return (

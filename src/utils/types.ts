@@ -5,3 +5,8 @@ export type NavigationProps = {
   label: string;
   icon: ReactNode;
 };
+
+export type Coordinate = {
+  latitude: number;
+  longitude: number;
+};
