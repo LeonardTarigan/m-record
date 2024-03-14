@@ -1,11 +1,11 @@
 "use client";
 
-import CameraIcon from "@/components/icons/camera-icon";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import LiveClock from "@/components/ui/live-clock";
 import StatusCard from "@/components/ui/status-card";
 import { getCurrentDay } from "@/lib/helpers/getCurrentDay";
 import { Coordinate } from "@/lib/types";
+import { Camera } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Webcam, { WebcamProps } from "react-webcam";
@@ -96,12 +96,15 @@ export default function Home() {
           <Dialog>
             <DialogTrigger className="flex w-full justify-center">
               <div className="relative flex aspect-square w-1/2 items-center justify-center rounded-lg bg-gradient-to-b from-blue-800 to-blue-600">
-                <CameraIcon />
+                <Camera
+                  strokeWidth={1.2}
+                  className="h-1/2 w-full fill-blue-700 text-white"
+                />
 
-                <div className="absolute left-0 top-0 m-2 aspect-square w-10 rounded-tl border-l-2 border-t-2 border-white"></div>
-                <div className="absolute right-0 top-0 m-2 aspect-square w-10 rounded-tr border-r-2 border-t-2 border-white"></div>
-                <div className="absolute bottom-0 left-0 m-2 aspect-square w-10 rounded-bl border-b-2 border-l-2 border-white"></div>
-                <div className="absolute bottom-0 right-0 m-2 aspect-square w-10 rounded-br border-b-2 border-r-2 border-white"></div>
+                <div className="absolute left-0 top-0 m-2 aspect-square w-10 rounded-tl border-l-4 border-t-4 border-white"></div>
+                <div className="absolute right-0 top-0 m-2 aspect-square w-10 rounded-tr border-r-4 border-t-4 border-white"></div>
+                <div className="absolute bottom-0 left-0 m-2 aspect-square w-10 rounded-bl border-b-4 border-l-4 border-white"></div>
+                <div className="absolute bottom-0 right-0 m-2 aspect-square w-10 rounded-br border-b-4 border-r-4 border-white"></div>
               </div>
             </DialogTrigger>
             <DialogContent className="w-[95%]">
@@ -117,7 +120,7 @@ export default function Home() {
               </div>
               <button
                 onClick={capture}
-                className="w-full rounded-md bg-blue-600 px-5 py-2 font-bold text-white"
+                className="w-full rounded-lg bg-blue-600 px-5 py-2 font-bold text-white transition-all duration-150 hover:bg-blue-800 disabled:bg-gray-400 disabled:text-gray-200"
               >
                 Ambil Foto
               </button>
@@ -143,18 +146,20 @@ export default function Home() {
         )}
 
         <div className="mt-5 flex w-full flex-col gap-2">
+          {
+            <button
+              disabled={!isWithinOfficeHour && !isWithinOfficeLocation}
+              className="w-full rounded-lg bg-blue-600 px-5 py-2 font-bold text-white transition-all duration-150 hover:bg-blue-800 disabled:bg-gray-400 disabled:text-gray-200"
+            >
+              Presensi
+            </button>
+          }
           {capturedImage && (
             <button
               onClick={() => setCapturedImage(null)}
-              className="w-full rounded-lg border-2 border-blue-600 px-5 py-2 font-bold text-blue-600 transition-all duration-150 disabled:bg-gray-400 disabled:text-gray-200"
+              className="w-full rounded-lg border-2 border-blue-600 px-5 py-2 font-bold text-blue-600 transition-all duration-150 hover:bg-gray-200 disabled:bg-gray-400 disabled:text-gray-200"
             >
               Ambil Ulang Foto
-            </button>
-          )}
-
-          {isWithinOfficeHour && isWithinOfficeLocation && (
-            <button className="w-full rounded-lg bg-blue-600 px-5 py-2 font-bold text-white transition-all duration-150 hover:bg-blue-800 disabled:bg-gray-400 disabled:text-gray-200">
-              Presensi
             </button>
           )}
         </div>
