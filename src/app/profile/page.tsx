@@ -17,15 +17,11 @@ function ProfilePage() {
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi, illo!
         </h2>
         <div className="">
-          <h3 className="text-xs">Jabatan</h3>
+          <h3 className="text-xs">Posisi</h3>
           <p className="font-semibold">Dokter</p>
         </div>
         <div className="">
-          <h3 className="text-xs">Jabatan</h3>
-          <p className="font-semibold">Dokter</p>
-        </div>
-        <div className="">
-          <h3 className="text-xs">Jabatan</h3>
+          <h3 className="text-xs">Nomor Induk Pegawai</h3>
           <p className="font-semibold">Dokter</p>
         </div>
         <button className="mt-10 w-full rounded-lg bg-red-700 px-5 py-2 font-semibold text-white transition-all duration-150 hover:bg-red-900 active:translate-y-1">

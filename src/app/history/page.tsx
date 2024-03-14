@@ -1,4 +1,4 @@
-import HistoryCard from "@/components/history-card";
+import HistoryCard from "@/components/ui/history-card";
 
 function HistoryPage() {
   return (

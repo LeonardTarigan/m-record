@@ -1,16 +1,21 @@
 "use client";
 
-import LiveClock from "@/components/live-clock";
-import StatusCard from "@/components/status-card";
-import { getCurrentDay } from "@/utils/helpers/getCurrentDay";
-import { Coordinate } from "@/utils/types";
-import { useEffect, useState } from "react";
+import CameraIcon from "@/components/icons/camera-icon";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import LiveClock from "@/components/ui/live-clock";
+import StatusCard from "@/components/ui/status-card";
+import { getCurrentDay } from "@/lib/helpers/getCurrentDay";
+import { Coordinate } from "@/lib/types";
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Webcam, { WebcamProps } from "react-webcam";
 
 export default function Home() {
-  const [userCoodinate, setUseerCoordinate] = useState<Coordinate>();
+  const [userCoodinate, setUserCoordinate] = useState<Coordinate>();
   const [isWithinOfficeHour, setIsWithinOfficeHour] = useState<boolean>();
   const [isWithinOfficeLocation, setIsWithinOfficeLocation] =
     useState<boolean>();
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   const officeCoordinate: Coordinate = {
     latitude: 3.483261638244815,
@@ -26,14 +31,10 @@ export default function Home() {
       setIsWithinOfficeHour(currentHour >= startHour && currentHour <= endHour);
     }, 1000);
 
-    return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
     navigator.geolocation.getCurrentPosition((location) => {
       const { latitude, longitude } = location.coords;
 
-      setUseerCoordinate({ latitude, longitude });
+      setUserCoordinate({ latitude, longitude });
 
       if (
         officeCoordinate.latitude === userCoodinate?.latitude &&
@@ -42,8 +43,24 @@ export default function Home() {
         setIsWithinOfficeLocation(true);
       }
     });
+
+    return () => clearInterval(intervalId);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const webcamRef = useRef<Webcam>(null);
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+
+    setCapturedImage(imageSrc as string);
+  }, [webcamRef]);
+
+  const videoConstraints: WebcamProps["videoConstraints"] = {
+    width: 500,
+    height: 500,
+    facingMode: "user",
+  };
 
   return (
     <main className="h-screen">
@@ -68,7 +85,45 @@ export default function Home() {
           <LiveClock />
           <p className="text-sm font-semibold">{getCurrentDay()}</p>
         </div>
-        <div className="aspect-square w-1/2 rounded-lg bg-gradient-to-b from-blue-800 to-blue-600"></div>
+
+        {capturedImage && (
+          <div className="relative aspect-square w-1/2 overflow-hidden rounded-lg">
+            <Image src={capturedImage} fill alt="result" />
+          </div>
+        )}
+
+        {!capturedImage && (
+          <Dialog>
+            <DialogTrigger className="flex w-full justify-center">
+              <div className="relative flex aspect-square w-1/2 items-center justify-center rounded-lg bg-gradient-to-b from-blue-800 to-blue-600">
+                <CameraIcon />
+
+                <div className="absolute left-0 top-0 m-2 aspect-square w-10 rounded-tl border-l-2 border-t-2 border-white"></div>
+                <div className="absolute right-0 top-0 m-2 aspect-square w-10 rounded-tr border-r-2 border-t-2 border-white"></div>
+                <div className="absolute bottom-0 left-0 m-2 aspect-square w-10 rounded-bl border-b-2 border-l-2 border-white"></div>
+                <div className="absolute bottom-0 right-0 m-2 aspect-square w-10 rounded-br border-b-2 border-r-2 border-white"></div>
+              </div>
+            </DialogTrigger>
+            <DialogContent className="w-[95%]">
+              <div className="relative mt-5 aspect-square w-full overflow-hidden rounded-lg bg-gray-500">
+                <Webcam
+                  audio={false}
+                  height={720}
+                  ref={webcamRef}
+                  screenshotFormat="image/jpeg"
+                  width={1280}
+                  videoConstraints={videoConstraints}
+                />
+              </div>
+              <button
+                onClick={capture}
+                className="w-full rounded-md bg-blue-600 px-5 py-2 font-bold text-white"
+              >
+                Ambil Foto
+              </button>
+            </DialogContent>
+          </Dialog>
+        )}
         {userCoodinate && (
           <div className="flex flex-col gap-2">
             {isWithinOfficeLocation && (
@@ -82,10 +137,27 @@ export default function Home() {
               <StatusCard type="green" message="Sedang Dalam Jam Kerja" />
             )}
             {!isWithinOfficeHour && (
-              <StatusCard type="red" message="Di Luar Jam Kerja" />
+              <StatusCard type="red" message="Diluar Jam Kerja" />
             )}
           </div>
         )}
+
+        <div className="mt-5 flex w-full flex-col gap-2">
+          {capturedImage && (
+            <button
+              onClick={() => setCapturedImage(null)}
+              className="w-full rounded-lg border-2 border-blue-600 px-5 py-2 font-bold text-blue-600 transition-all duration-150 disabled:bg-gray-400 disabled:text-gray-200"
+            >
+              Ambil Ulang Foto
+            </button>
+          )}
+
+          {isWithinOfficeHour && isWithinOfficeLocation && (
+            <button className="w-full rounded-lg bg-blue-600 px-5 py-2 font-bold text-white transition-all duration-150 hover:bg-blue-800 disabled:bg-gray-400 disabled:text-gray-200">
+              Presensi
+            </button>
+          )}
+        </div>
       </section>
     </main>
   );

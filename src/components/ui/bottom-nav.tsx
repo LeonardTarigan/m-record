@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import HomeIcon from "./icons/home-icon";
-import HourglassIcon from "./icons/hourglass-icon";
-import UserCircleIcon from "./icons/user-circle-icon";
-import { NavigationProps } from "@/utils/types";
+import HomeIcon from "../icons/home-icon";
+import HourglassIcon from "../icons/hourglass-icon";
+import UserCircleIcon from "../icons/user-circle-icon";
+import { NavigationProps } from "@/lib/types";
 import { usePathname } from "next/navigation";
 
 const menus: NavigationProps[] = [
