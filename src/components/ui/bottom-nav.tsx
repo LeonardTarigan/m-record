@@ -1,27 +1,26 @@
 "use client";
 
-import Link from "next/link";
-import HomeIcon from "../icons/home-icon";
-import HourglassIcon from "../icons/hourglass-icon";
-import UserCircleIcon from "../icons/user-circle-icon";
 import { NavigationProps } from "@/lib/types";
+import { CircleUserRound, HistoryIcon, Home } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import UserCircleIcon from "../icons/user-circle-icon";
 
 const menus: NavigationProps[] = [
   {
     path: "/",
     label: "home",
-    icon: <HomeIcon className="w-6" />,
+    icon: <Home className="w-6" />,
   },
   {
     path: "/history",
     label: "history",
-    icon: <HourglassIcon className="w-6" />,
+    icon: <HistoryIcon className="w-6" />,
   },
   {
     path: "/profile",
     label: "profile",
-    icon: <UserCircleIcon className="w-6" />,
+    icon: <CircleUserRound className="w-6" />,
   },
 ];
 
@@ -36,7 +35,7 @@ function BottomNav() {
             <Link
               key={index}
               href={path}
-              className={`flex w-1/3 flex-col items-center rounded-full p-1 capitalize ${path === currentPath ? "bg-red-800" : "text-red-200"}`}
+              className={`flex w-1/3 flex-col items-center rounded-full p-1 pt-2 capitalize ${path === currentPath ? "bg-red-800" : "text-red-200"}`}
             >
               {icon}
               <p>{label}</p>

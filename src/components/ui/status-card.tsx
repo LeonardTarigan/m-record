@@ -1,6 +1,4 @@
-import BadgeCheckIcon from "../icons/badge-check-icon";
-import { CheckIcon } from "../icons/check-icon";
-import { XMarkIcon } from "../icons/x-mark";
+import { Check, X } from "lucide-react";
 
 type StatusCardProps = {
   type: "green" | "red";
@@ -14,12 +12,12 @@ function StatusCard({ type, message }: StatusCardProps) {
     >
       {type === "green" && (
         <div className="rounded-full bg-green-500 p-1">
-          <CheckIcon className="h-4 w-4 text-white" />
+          <Check className="h-4 w-4 text-white" />
         </div>
       )}
       {type === "red" && (
         <div className="rounded-full bg-red-600 p-1">
-          <XMarkIcon className="h-4 w-4 text-white" />
+          <X className="h-4 w-4 text-white" />
         </div>
       )}
 
