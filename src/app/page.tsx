@@ -12,9 +12,9 @@ import Webcam, { WebcamProps } from "react-webcam";
 
 export default function Home() {
   const [userCoodinate, setUserCoordinate] = useState<Coordinate>();
-  const [isWithinOfficeHour, setIsWithinOfficeHour] = useState<boolean>();
+  const [isWithinOfficeHour, setIsWithinOfficeHour] = useState<boolean>(false);
   const [isWithinOfficeLocation, setIsWithinOfficeLocation] =
-    useState<boolean>();
+    useState<boolean>(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   const officeCoordinate: Coordinate = {
@@ -148,7 +148,7 @@ export default function Home() {
         <div className="mt-5 flex w-full flex-col gap-2">
           {
             <button
-              disabled={!isWithinOfficeHour && !isWithinOfficeLocation}
+              disabled={!isWithinOfficeHour || !isWithinOfficeLocation}
               className="w-full rounded-lg bg-blue-600 px-5 py-2 font-bold text-white transition-all duration-150 hover:bg-blue-800 disabled:bg-gray-400 disabled:text-gray-200"
             >
               Presensi
