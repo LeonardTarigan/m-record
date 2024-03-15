@@ -11,6 +11,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { compareHashedPasswords } from "@/lib/helpers/compareHashedPassword";
+import { hashPassword } from "@/lib/helpers/hashPassword";
 import supabase from "@/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -47,15 +49,27 @@ function LoginPage() {
         .from("employees")
         .select()
         .eq("id", parseInt(nip))
-        .eq("password", password)
         .single();
 
-      if (error) throw new Error();
+      if (error)
+        throw new Error(`Data pegawai dengan NIP ${nip} tidak ditemukan!`);
       if (data) {
-        setErrorMessage(null);
+        const isTruePassword = await compareHashedPasswords(
+          password,
+          data.password,
+        );
+
+        if (isTruePassword) {
+          setErrorMessage(null);
+          console.log(data);
+        } else {
+          throw new Error("Password salah!");
+        }
       }
     } catch (e) {
-      setErrorMessage("NIP atau Password salah. Data tidak ditemukan.");
+      if (e instanceof Error) {
+        setErrorMessage(e.message);
+      }
     } finally {
       setIsFetching(false);
     }
