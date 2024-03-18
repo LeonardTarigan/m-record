@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/app/store/auth";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { compareHashedPasswords } from "@/lib/helpers/compareHashedPassword";
+import { Employee } from "@/lib/types";
 import supabase from "@/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -28,6 +30,8 @@ function FormEmployee() {
   const [showPassword, setShowPassword] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { setEmployeeData, employeeData } = useAuthStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,6 +55,7 @@ function FormEmployee() {
 
       if (error)
         throw new Error(`Data pegawai dengan NIP ${nip} tidak ditemukan!`);
+
       if (data) {
         const isTruePassword = await compareHashedPasswords(
           password,
@@ -59,7 +64,25 @@ function FormEmployee() {
 
         if (isTruePassword) {
           setErrorMessage(null);
-          console.log(data);
+
+          const office = await supabase
+            .from("offices")
+            .select()
+            .eq("id", data.office_id)
+            .single();
+
+          const storedData: Employee = {
+            name: data.name,
+            role: data.role,
+            start_time: data.start_time,
+            end_time: data.end_time,
+            office: {
+              name: office.data.name,
+              coordinate: office.data.coordinate,
+            },
+          };
+
+          setEmployeeData(storedData);
         } else {
           throw new Error("Password salah!");
         }
