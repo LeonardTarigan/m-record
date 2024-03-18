@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { compareHashedPasswords } from "@/lib/helpers/compareHashedPassword";
-import { hashPassword } from "@/lib/helpers/hashPassword";
 import supabase from "@/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -108,7 +107,7 @@ function LoginPage() {
                     <Input
                       placeholder="123456789"
                       {...field}
-                      className="mt-0"
+                      className="mt-0 placeholder:text-gray-300"
                     />
                   </FormControl>
                   <FormMessage />
@@ -124,6 +123,7 @@ function LoginPage() {
                   <FormControl>
                     <Input
                       placeholder="xxxxxxxxxxxx"
+                      className="placeholder:text-gray-300"
                       type={showPassword ? "text" : "password"}
                       {...field}
                     />
